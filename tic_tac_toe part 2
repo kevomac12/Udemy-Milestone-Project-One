@@ -1,0 +1,373 @@
+from IPython.display import clear_output
+from IPython import embed
+import os
+import pdb
+import sys
+import random
+# DEBUGGING environment variables for Debugger - PDB...
+# os.environ['PYTHONBREAKPOINT'] = 'pdb.set_trace'
+# print(os.getenv('PYTHONBREAKPOINT'))
+## Unjfortunately it doesn't work for the Jupyter NB... Uhuh!
+
+# Global; init game vars 
+gameOn = True
+foo :int = 0
+# myContinue = True
+player1 = "X"
+player2 = "O"
+#---------------------------------------------------------------------------------
+box1 :int 
+box2 :int 
+numMoves :int 
+numMoves, box1, box2 = 0, 0, 0
+#---------------------------------------------------------------------------------
+answ_list: list[str] = ["y", "Y", "n", "N"]
+#---------------------------------------------------------------------------------
+# Suggested by Copilot --> tic_tac_toe: list[list[str]] = [[''], [''], ['']]
+# Mine --> place1, place2 = ttt_board_1 = [['', '', ''], ['', '', ''], ['', '', '']]
+#---------------------------------------------------------------------------------
+ttt_board: list[list[str]] = [[''], [''], ['']]  
+ttt_board_1: list[list[str]] = [[''], [''], ['']]
+tic_tac_toe: list[list[str]] = [[''], [''], ['']]
+
+# initial board for display
+ttt_board = [["X", "O", "X"], ["O", "X", "O"], ["X", "O", "X"]]
+
+# init the game board slots by number
+ttt_board_1 = [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"]]
+
+# player(s) slots to place X or O
+tic_tac_toe = [['', '', ''], ['', '', ''], ['', '', '']]
+#---------------------------------------------------------------------------------
+
+# no inputs, it just prints details about the game! 
+def game_message(ttt_board):
+
+    #ttt_board = [["X", "O", "X"], ["O", "X", "O"], ["X", "O", "X"]]
+
+    message_1 = '\nWelcome to the Tic-Tac-Toe game, as you can see, the standard\n'
+    message_2 = 'board layout of three rows, with three boxes per row in three columns!' 
+    message_string_marker = message_1 + message_2
+    
+    print(message_string_marker)    
+    
+    for row in ttt_board:
+        # I'm not getting 3 rows, on top of ea. other
+        print("| " + " | ".join(row) + " |")
+
+    input("\nPress Enter to continue...\n")
+
+    clear_output()
+    
+##END-->game_message()
+
+# it actually builds the gameboard w/join,ttt_board is strictly for display!
+# the join performs the building of a 3 X 3 list*, ttt_board* gives the 
+# players the guide, to where the X's/O's may be placed!
+def display_game_board(ttt_board_1):
+
+    # ttt_board_1 = [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"]]
+    # TODO
+    # this is where I want html to light the board, blink the board,
+    #    change colors on the board, and do all kinds of stuff
+    #      I want to see the altered board!!
+
+    print(f'Now the Playing board, w/spaces numbered from 1 (top left) to 9 (bottom right)!')
+    for row in ttt_board_1:
+        # I'm not getting 3 rows, on top of ea. other
+        print("| " + " | ".join(row) + " |")
+
+    return
+##END-->display_game_board()    
+
+def player_doOver():
+    # Example function to get player input (box number 1-9) when spot is taken
+    pdb.set_trace(print(f'he came to get a new box# as the org. was occupied!'))
+    new_board = check_B4_writing(numMoves, place1, place2)
+    print(new_board)
+    print(f'You attempted to place your choice in a occupied spot!')
+    box = int(input('Enter a new box number (1-9): '))
+    return box
+
+##END-->player_doOver()
+
+# Two lists, place1/2 are used to select the proper placement of the X/O
+# pieces. numMoves (int), counts moves as there are only 9 in a game!
+# gameOn is a bool for game execution!
+def player_input(numMoves, gameOn, foo):
+
+    global box1, box2
+    global tic_tac_toe 
+    global starter, not_starter
+    starter, not_starter = False, False
+
+    clear_output()  # Clear screen!
+    
+    # Reference: these hold for the assignments of X & O
+    place1 = [['', '', ''], ['', '', ''], ['', '', '']] 
+    place2 = [['', '', ''], ['', '', ''], ['', '', '']]
+    
+    ## Only on 1st execution of the game, 
+    pdb.set_trace(print(f'player_input(), foo is {foo}!'))  
+    if foo < 2 and numMoves == 0:
+        starter = True
+        not_starter = False
+        # pdb.set_trace(print(f'Step check {starter} starter, and {not_starter} not_starter!'))  
+        print(f'You are player 1, "X" goes first!')
+    elif foo > 2 and numMoves == 0:
+        not_starter = True 
+        starter = False
+        # pdb.set_trace(print(f'Step check {starter} starter, and {not_starter} not_starter!'))
+        print(f'You are player 2, "O" goes first!')
+    
+    while gameOn and numMoves <= 9:         
+
+        pdb.set_trace(print(f'starter is true or false:{starter}, not_starter {not_starter}!'))
+        # if starter:
+        #while True:
+        while starter and not not_starter:
+            try:
+                pdb.set_trace(print(f'B4 {starter}'))
+                box1 = int(input(f'\nSelect a numbered box for your "X" move!'))                        
+                pdb.set_trace(print(f'Aft {not_starter}'))
+                # I need this one too!
+                box2 = int(input(f'Place your "O" in a numbered box for your move!: \n'))
+                break
+            except ValueError:
+                print(f'Invalid input! Please enter a number from 1 to 9!\n')
+                
+            # inc the move counter (numMoves)
+            numMoves += numMoves               
+            pdb.set_trace(print(f'Player using "X" selected box: {box1}!'))
+        
+            # if not not_starter:
+        else:
+            if not starter and not_starter:
+                pdb.set_trace(print(f'starter is true or false, starter is {starter}!'))
+                # player2 is always 'O':
+                #while not_starter:
+                try:
+                    box2 = int(input(f'Place your "O" in a numbered box for your move!: \n'))
+                    # I need this one too!
+                    box1 = int(input(f'\nSelect a numbered box for your "X" move!'))
+                    break
+                except ValueError:
+                    print(f'Invalid input! Please enter a number from 1 to 9!')
+                        
+                # inc the move counter (numMoves) when the move is to an open spot!
+                #  else player_doOver is called.
+            numMoves += 1
+            
+        pdb.set_trace(print(f'Player using "O" selected box: {box2}!'))
+        
+        '''
+        my reference to the game board is 3 X 3
+        't1' = [0][0] =| 1 | 't2' = [0][1] =| 2 | 't3' = [0][2] =| 3 |
+        't4' = [1][0] =| 4 | 't5' = [1][1] =| 5 | 't6' = [1][2] =| 6 |
+        't7' = [2][0] =| 7 | 't8' = [2][1] =| 8 | 't9' = [2][2] =| 9 |
+        '''
+
+        pdb.set_trace(print(f'End player_input(), place1 {place1}, place2 {place2}!'))
+        
+        # I'm getting the coordinates for the placement of the players choice:
+        for row in range(len(tic_tac_toe)):
+            for col in range(len(tic_tac_toe[row])):
+                ## this is the 'X' player slot check...
+                # for box in range(1, 10):
+                if box1 != 0 and player1:
+                    row, col = divmod(box1 - 1, 3)
+                    pdb.set_trace(print(f'what is row {row}, & col {col}?'))
+                    place1 = tic_tac_toe[row][col]
+                    pdb.set_trace(print(f"I'm checking place1={place1} for an open slot!"))
+                    input("\nPress Enter to continue...")
+                    # There's a convention in Python, that 'positional' arguments 
+                    #  cannot come after 'keyword' arguments
+                    if check_b4_writing(numMoves, place1, None):
+                        # write 'X' to tic_tac_toe
+                        tic_tac_toe[row][col] = player1
+                        # ?? saving 'X' in Place1
+                        place1 = tic_tac_toe[row][col]
+                        pdb.set_trace(print(f'Player1: {tic_tac_toe[row][col]}!'))
+                        # vaild move inc numMoves
+                        numMoves += 1
+                    else:
+                        # space not empty, try again
+                        print(f'Spot ({row}, {col}) is taken. Choose another spot!')
+                        box1 = player_doOver()
+                        # convert to row/col
+                        row, col = divmod(box1 - 1, 3)
+                        tic_tac_toe[row][col] = player1
+                        # the choice was to an filled spot, if were here, an update occurs,
+                        #  and the new choice is correct, and numMoves has not inc'd, yet!
+                        numMoves += 1
+                elif box1 == 0:
+                    break
+                
+                ## this is the 'O' player slot check...
+                if box2 != 0 and player2:
+                    row, col = divmod(box2 - 1, 3)
+                    place2 = tic_tac_toe[row][col]
+                    pdb.set_trace(print(f"I'm checking place2 for an open slot!"))
+                    # if check_b4_writing(numMoves, None, place2) == True
+                    if check_b4_writing(numMoves, None, place2):
+                        # why am I not using place2, set above, 2 lines
+                        tic_tac_toe[row][col] = player2   
+                        # ?? saving 'O' in Place2
+                        place2 = tic_tac_toe[row][col]
+                        pdb.set_trace(print(f'Player2: {tic_tac_toe[row][col]}!'))
+                        # vaild move inc numMoves
+                        numMoves += 1
+                    else:
+                        # space not empty, try again
+                        print(f'Spot ({row}, {col}) is taken. Choose another spot!')
+                        box2 = player_doOver()
+                        # convert to row/col
+                        row, col = divmod(box2 - 1, 3)
+                        tic_tac_toe[row][col] = player2
+                        # the choice was to a filled spot, if were here, a correct is done,
+                        #  and the new choice is correct, and numMoves has not inc'd, yet!
+                        numMoves += 1
+                        
+                elif box2 == 0:
+                    break
+        
+        # END FOR row, col
+
+        for row in tic_tac_toe:
+            #  Here's where I think building the player gameboard s/b!
+            print(" | " + " | ".join(row) + " | ")
+            pdb.set_trace(print(f'\nplayerinput(), "For" loop of tic tac toe!\n'))
+    
+        # I'm approaching the end of the 3 X 3 array
+        #  I think stillPlaying() needs to be seen before I call it.
+        #   Currently it is not!
+        if numMoves == 9:
+            print(f'Nine moves made!')
+            stillPlaying(numMoves)                    
+                    
+        
+    # END WHILE
+    # these s/b filled w/numMoves and 'X' & 'O'
+    check_b4_writing(numMoves, place1, place2)
+    pdb.set_trace(print(f'I need these 2 filled-->place1 {place1}, place2 {place2}!'))
+    
+##END-->player_input() 
+
+# def check_b4_writing(numMoves, place1=None, place2=None):        
+def check_b4_writing(numMoves, place1, place2):        
+    # I'm going to change these from the init vals
+    global tic_tac_toe
+    ## DEBUG depending on if 'X' called/'O' called, 'X' = None or 'O' = None
+    print(f'place1 = {place1}, place2 = {place2}')
+    
+    # todo, logic isn't going to work
+    message_1 = 'You are now ready to place your piece on the board, you must provided\n'
+    message_2 = 'one (1) numbered box, for each move! Row 0 is (boxes 1, 2, 3),\n'
+    message_3 = 'row 1 is (boxes 4, 5, 6),  and row 2 is (boxes 7, 8, 9).\n' 
+    message_4 = 'If the spot either player chooses is taken, a message will appear!\n'
+    message_string_marker = message_1 + message_2 + message_3 + message_4
+    print(message_string_marker)
+    print('\n')
+
+    gameOn = True
+    ## DEBUG depending on if 'X' called/'O' called, 'X' = None or 'O' = None
+    print(f'place1 = {place1}, place2 = {place2}')
+    # ttt_board_1 = tic_tac_toe
+    pdb.set_trace(print(f'check_b4_writing() - Step from here to see what \
+ttt_board_1 & tic_tac_toe ... See what place1 & place2 are!!'))
+        
+    while gameOn and numMoves <= 9:
+        
+        for row in range(len(tic_tac_toe)):
+            for col in range(len(tic_tac_toe[row])):
+                # DeBug Print the current values of row and col
+                pdb.set_trace(print(f'Current row: {row}, Current col: {col}'))
+                # DeBug Check and update for place1 ('X')
+                pdb.set_trace(print(f'Step hereFor loop: is the spot open or not?'))
+                if player1 == 'X':
+                    if tic_tac_toe[row][col] == '':
+                        print(f'tic_tac_toe[{row}][{col}] open!')
+                        tic_tac_toe[row][col] = player1
+                        # save the spot marked w/'X'
+                        place1 = tic_tac_toe[row][col]
+                        pdb.set_trace(print(f"tic_tac_toe = {tic_tac_toe}!"))
+                        return tic_tac_toe
+                    else:                   
+                        pdb.set_trace(print(f"The spot ({row}, {col}) is not empty!"))
+                        # Continue checking the rest of the board
+                if player2 == 'O':
+                    if tic_tac_toe[row][col] == '':
+                        pdb.set_trace(print(f'Is "O" tic_tac_toe[row][col] open!'))
+                        tic_tac_toe[row][col] = player2
+                        # save the spot marked w/'O'
+                        place2 = tic_tac_toe[row][col]
+                        return tic_tac_toe
+                    else:
+                        pdb.set_trace()  # Set a breakpoint here
+                        print(f"The spot ({row}, {col}) is filled with {tic_tac_toe[row][col]}!")
+                        # Continue checking the rest of the board
+                    
+    # is this going to work or what?
+    pdb.set_trace(print(f'B4: new board, are the pieces in the proper slot?'))
+    new_board = check_B4_writing(numMoves, place1, place2)
+    print(new_board)   ## I don't think I've quite got it!?
+    pdb.set_trace(print(f'After: new board, and the pieces in the proper slot?'))
+    print(f'Halt here if all is well above!!')   
+
+##END-->mark_gameboard()
+                 
+# Is game on?
+def stillPlaying(numMoves):
+
+    # if numMoves (from above) is not 0, therefore ?go/no go?
+    if numMoves > 0 and gameOn:
+        answ = input(f'\nContinue playing tic tac toe y/Y/n/N?' )
+        pdb.set_trace()
+        if answ == "y" or "Y":
+            # answ =  'y' or 'Y'
+            numMoves = numMoves - numMoves
+            game_message()
+        elif answ == "n" or "N":
+            gameOn = False
+            print(f'\nBye!')
+            exit()
+    else:
+        print(f'\nNo moves by a player!')
+
+##END-->stillPlaying           
+
+# which player goes first? Well create random(player1, player1)
+def who_starts():
+ 
+    foo = random.randint(1, 3) 
+
+    while foo != 0: 
+        if foo < 2:
+            print(f"Player1 starts!")
+        elif foo > 2:
+            print(f"Player2 starts!")
+        else:
+            # foo is == 2, go again!
+            foo = who_starts()
+
+    return foo
+##END
+
+def main():
+    #print('Welcome to the Tic Tac Toe game!')
+    game_message(ttt_board)
+    display_game_board(ttt_board_1)
+    foo = who_starts()
+    # Players choose where to put their X/O
+    # pdb.set_trace(print(f'\nmain(); player_input() is next!'))
+    player_input(numMoves, gameOn, foo)
+
+    # I'm not sure how to pass the values from player_input() to mark_gameboard()
+    pdb.set_trace(print(f'\nmain(); check_gameboard is next!'))
+    check_B4_writing(numMoves, place1, place2)
+    stillPlaying(numMoves)
+
+
+if __name__ == "__main__":
+    main()
+    
